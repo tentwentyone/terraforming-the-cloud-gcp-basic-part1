@@ -1,14 +1,14 @@
 ## terraform & providers
 terraform {
-  required_version = ">= 1.0.0"
-  backend "local" {
-    path = "terraform.tfstate"
+  required_version = ">= 1.5.7"
+  backend "gcs" {
+    bucket = "ten21-terraforming-p-154457-tf-state"
+    prefix = "tf-state"
   }
-
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 4"
+      version = "~> 6.15"
     }
   }
 }

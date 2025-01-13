@@ -69,7 +69,7 @@ Abrir novo terminal (embebido no editor):
 Clonar o projeto:
 
 ```bash
-git clone https://github.com/nosportugal/terraforming-the-cloud-part1 && cd terraforming-the-cloud-part1
+git clone https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1.git && cd terraforming-the-cloud-gcp-basic-part1
 ```
 
 Abrir o editor na pasta do projeto:
@@ -121,6 +121,62 @@ Por fim, podemos clonar o projeto:
 ```bash
 git clone https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1.git && cd terraforming-the-cloud-gcp-basic-part1
 ```
+
+<details>
+  <summary>Solution</summary>
+
+  ```hcl
+resource "google_service_account" "this" {
+  account_id   = "${random_pet.this.id}-final"
+  display_name = "${random_pet.this.id}-final"
+}
+
+# criar uma VM
+resource "google_compute_instance" "this" {
+  name         = "${random_pet.this.id}-final-boss"
+  machine_type = "e2-small"
+  zone         = "${var.region}-b"
+  tags = [ "allow-iap" ]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  network_interface {
+    subnetwork = data.google_compute_subnetwork.default.self_link
+  }
+
+  service_account {
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    email  = google_service_account.this.email
+    scopes = ["cloud-platform"]
+  }
+}
+
+output "final_vm" {
+  value = {
+      vm_name = google_compute_instance.this.name
+      vm_zone = google_compute_instance.this.zone
+      vm_project = google_compute_instance.this.project
+      vm_ip = google_compute_instance.this.network_interface.0.network_ip
+      gcloud_cmd = "gcloud compute ssh ${google_compute_instance.this.name} --project=${google_compute_instance.this.project} --zone ${google_compute_instance.this.zone}"
+  }
+}
+
+output "final_vm_name" {
+  value = google_compute_instance.this.name
+}
+
+output "final_vm_namevm_zone" {
+  value = google_compute_instance.this.zone
+}
+```
+
+</details>
+
+---
 
 ## Comandos úteis
 

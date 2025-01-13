@@ -14,18 +14,39 @@
 
 **Tempo estimado**: Cerca de 2 horas
 
-**Pré requsitos**: Antes de começares, é necessário verificares algumas coisas:
+**Pré requisitos**: Antes de começares, é necessário verificares algumas coisas:
 
 Certifica-te que tens a `google-cloud-shell` devidamente autorizada correndo este comando:
 
 ```bash
-gcloud config set project tf-gke-lab-01-np-000001 && gcloud config set accessibility/screen_reader false
+gcloud config set project ten21-terraforming-p-154457 && gcloud config set accessibility/screen_reader false
 ```
+
+Garante que tens a extensão da HashiCorp Terraform instalada:
+
+Vai às tuas extensões:
+
+![Cloud Shell Extensions][tfc-cloud-shell-extensions]
+
+<sub>💡Para abrires as imagens clica na mesma com o botão direito do rato e escolhe a opção "Abrir Imagem num novo Separador</sub>
+
+Instala a extensão:
+
+![Cloud Shell Extensions Install][tfc-cloud-shell-extensions-install]
+
+Regressa ao "Explorer":
+
+![Cloud Shell File Explorer][tfc-cloud-shell-explorer]
 
 Para evitar que o terraform peça o nome do projeto a cada `apply`, podemos definir o nome do projeto por defeito:
 
 * Abrir o ficheiro `terraform.tfvars`
 * Descomentar a linha `project_id` e adicionar o id do projeto.
+
+Utiliza o comando:
+
+* Windows: **CTRL + K + U**
+* Mac: **CMD + K + U**
 
 De seguida, clica no botão **Start** para começares.
 
@@ -57,6 +78,11 @@ terraform plan -out plan.tfplan
 
 * Abrir o ficheiro <walkthrough-editor-select-line filePath="terraform.tfvars" startLine="0" endLine="0" startCharacterOffset="0" endCharacterOffset="200">terraform.tfvars</walkthrough-editor-select-line>.
 * Descomentar a linha `project_id` e adicionar o id do projeto que aparece a amarelo na linha de comandos.
+
+Utiliza o comando:
+
+* Windows: **CTRL + K + U**
+* Mac: **CMD + K + U**
 
 ### Comando `apply`
 
@@ -126,6 +152,11 @@ gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output
 > **As alterações não disruptivas são pequenas alterações que possibilitam a re-configuração do recurso sem que este tenha que ser recriado, não afetando as suas dependências**
 
 * Editar o ficheiro <walkthrough-editor-select-line filePath="main.tf" startLine="57" endLine="57" startCharacterOffset="0" endCharacterOffset="200">main.tf</walkthrough-editor-select-line>, localizar o recurso `google_compute_instance.default` e descomentar o campo `tags = [ "allow-iap" ]` na definição do recurso
+
+Utiliza o comando:
+
+* Windows: **CTRL + K + U**
+* Mac: **CMD + K + U**
 
 Executar `terraform plan -out plan.tfplan` e verificar que o Terraform irá efectuar um `update in-place` - isto é uma alteração simples.
 
@@ -255,6 +286,11 @@ import {
 
 Para o exercicio que segue, vamos ao ficheiro <walkthrough-editor-select-line filePath="import-exercise.tf" startLine="2" endLine="10" startCharacterOffset="0" endCharacterOffset="200">import-exercise.tf</walkthrough-editor-select-line> e descomentar os blocos `import { ... }`
 
+Utiliza o comando:
+
+* Windows: **CTRL + K + U**
+* Mac: **CMD + K + U**
+
 Antes de efetuar a importação precisamos de obter o `id` do recurso a importar do lado do GCP tal como descrito nas instruções de importação para o recurso [`google_compute_network`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_network#import).
 
 Existem várias formas para obter o `id` dos recursos, neste exemplo usamos os comandos `gcloud`:
@@ -326,8 +362,6 @@ Prentende-se o seguinte:
 gcloud compute instances describe COMPUTE_INSTANCE_NAME --zone=COMPUTE_INSTANCE_ZONE
 ```
 
-</details>
-
 ## 5. wrap-up & destroy
 
 Destruir os conteúdos!
@@ -347,4 +381,10 @@ terraform destroy
  [//]: # (INSERT IMAGE REFERENCES BELOW)
  [//]: # (*****************************)
 
-[tfc-arch]: https://github.com/nosportugal/terraforming-the-cloud-part1/raw/main/images/terraforming-the-cloud.png "Terraforming the cloud architecture"
+[tfc-arch]: https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1/raw/main/images/terraforming-the-cloud.png "Terraforming the cloud architecture"
+
+[tfc-cloud-shell-extensions]: https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1/raw/main/images/cloudshell-extensions.png "Cloud Shell Extensions"
+
+[tfc-cloud-shell-extensions-install]: https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1/raw/main/images/cloudshell-extensions-install.png "Cloud Shell Extensions Install"
+
+[tfc-cloud-shell-explorer]: https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1/raw/main/images/cloudshell-file-explorer.png "Cloud Shell File Explorer"

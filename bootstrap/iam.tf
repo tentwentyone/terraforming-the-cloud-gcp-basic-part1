@@ -5,9 +5,11 @@ locals {
     {
       member = "group:${var.gcp_trainer_group}"
       roles = [
-        "roles/editor",
+        "roles/compute.admin",
+        "roles/dns.admin",
         "roles/iap.tunnelResourceAccessor",
-        "roles/container.admin"
+        "roles/container.admin",
+        "roles/iam.serviceAccountAdmin"
       ]
     }
   ]
@@ -32,4 +34,22 @@ resource "google_project_iam_member" "this" {
   depends_on = [
     google_project_service.this
   ]
+}
+
+resource "google_project_iam_member" "dns_admin_sa" {
+  project = data.google_project.this.name
+  role    = "roles/dns.admin"
+  member  = "serviceAccount:${google_service_account.dns_admin.email}"
+
+  #Cloud Build creates the SA after enabling the API, so we need it to be enabled first
+  depends_on = [
+    google_project_service.this,
+    google_project_iam_member.this
+  ]
+}
+
+resource "google_service_account_iam_member" "external_dns" {
+  service_account_id = google_service_account.dns_admin.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${data.google_project.this.project_id}.svc.id.goog[external-dns/external-dns]"
 }
