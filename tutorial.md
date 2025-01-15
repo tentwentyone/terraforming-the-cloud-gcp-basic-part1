@@ -6,7 +6,7 @@
 
 * Estrutura base de um projecto terraform: `main.tf`, `variables.tf`, `outputs.tf`
 * Utilização de `variable`, `data`, `resource` e `output`.
-* `terrafom.tfvars` é usado por defeito se tiver presente na mesma diretória.
+* `terraform.tfvars` é usado por defeito se tiver presente na mesma diretória.
 * Os 4 principais comandos de terraform: `init`, `plan`, `apply` e `destroy`.
 * Gestão de alterações: **simples**, **disruptivas** e **dependentes**.
 * Importação de recursos existentes.
@@ -279,7 +279,7 @@ Exemplo de um bloco `import`:
 
 ```hcl
 import {
-  id = "projects/tf-gke-lab-01-np-000001/global/networks/somevpc"
+  id = "projects/ten21-terraforming-p-154457/global/networks/somevpc"
   to = google_compute_network.imported
 }
 ```
@@ -353,6 +353,14 @@ Prentende-se o seguinte:
 
 * [`google_service_account`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account)
 * [`google_compute_instance`](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance)
+
+Para fazeres ssh faz o seguinte comando:
+
+```bash
+gcloud compute ssh <COMPUTE_INSTANCE_NAME> --project <PROJECT-ID> --zone <ZONE-NAME>
+```
+
+<sub>💡Preenche os campos necessários com a informação referente à tua Compute Instance Name, Project ID e Zone</sub>
 
 💡 Uma subnet já existente poderá ser <walkthrough-editor-select-line filePath="main.tf" startLine="46" endLine="49" startCharacterOffset="0" endCharacterOffset="200">data.google_compute_subnetwork.default.self_link</walkthrough-editor-select-line>.
 
