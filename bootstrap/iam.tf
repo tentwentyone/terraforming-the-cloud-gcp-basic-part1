@@ -6,10 +6,13 @@ locals {
       member = "group:${var.gcp_trainer_group}"
       roles = [
         "roles/compute.admin",
+        "roles/compute.networkAdmin",
         "roles/dns.admin",
         "roles/iap.tunnelResourceAccessor",
         "roles/container.admin",
-        "roles/iam.serviceAccountAdmin"
+        "roles/iam.serviceAccountAdmin",
+        "roles/iam.serviceAccountUser",
+        "roles/serviceusage.serviceUsageAdmin"
       ]
     }
   ]
