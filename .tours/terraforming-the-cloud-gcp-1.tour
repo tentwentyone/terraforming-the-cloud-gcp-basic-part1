@@ -1,0 +1,232 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "terraforming-the-cloud-gcp-1",
+  "steps": [
+    {
+      "file": "tutorial.md",
+      "description": "Bem-vindo ao workshop!\n\nAqui tens um breve resumo dos conteúdos abordados neste módulo.\n\nAproveita para dar uma vista de olhos nos tópicos e verificar se tens todos os requisitos para prosseguir com o workshop.",
+      "line": 2
+    },
+    {
+      "file": "tutorial.md",
+      "description": "Certifica-te que estás no teu terminal fazendo o comando:\n- **ctrl+ç**\n\nAlternativamente, no canto superior esquerdo, podes também clicar em:\n\n- **View** e depois selecionar **Terminal**",
+      "line": 5
+    },
+    {
+      "file": "tutorial.md",
+      "description": "No terminal faz login em GCP utilizando o comando:\n>> gcloud auth login --update-adc --no-launch-browser",
+      "line": 6
+    },
+    {
+      "file": "tutorial.md",
+      "description": "Para definir o projecto faz o comando:\n>> gcloud config set project tf-gke-lab-01-np-000001 && gcloud config set accessibility/screen_reader false\n\nCertifica-te que estás no projecto correcto fazendo o comando:\n>> gcloud config get-value project\n\n\nSe quiseres ver todos os projectos a que tens acesso faz o comando:\n>> gcloud projects list",
+      "line": 7
+    },
+    {
+      "file": "terraform.tfvars",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 1,
+          "character": 17
+        }
+      },
+      "description": "Para evitar que o terraform peça o nome do projeto a cada apply, podemos definir o nome do projeto por defeito:\n\n- Descomenta a linha **project_id** e adiciona o id do projecto.\n\nPara descomentar seleciona o bloco e faz o comando:\n\n- Windows: **CTRL + K + U**\n- Mac: **CMD + K + U**"
+    },
+    {
+      "file": "main.tf",
+      "description": "## 1. O primeiro contacto\n\nNesta secção iremos executar os 4 principais comandos de terraform: init, plan, apply e destroy.\n\n**[terraform init](https://developer.hashicorp.com/terraform/cli/commands/init)**\n- O comando terraform init é utilizado para inicializar uma diretoria que contém ficheiros de configuração de Terraform. Este é o primeiro comando que deve ser executado após escrever uma nova configuração de Terraform ou clonar uma existente. É seguro executar este comando várias vezes.",
+      "line": 1
+    },
+    {
+      "file": "main.tf",
+      "description": "Para começar executa o comando:\n\n>> terraform init",
+      "line": 2
+    },
+    {
+      "file": "main.tf",
+      "description": "**[terraform plan](https://developer.hashicorp.com/terraform/cli/commands/plan)**\n\nO comando terraform plan cria um plano de execução, permitindo visualizar antecipadamente as alterações que o Terraform pretende fazer à infraestrutura. Por predefinição, quando o Terraform cria um plan:\n\n- Lê o estado atual de quaisquer objetos remotos existentes para garantir que o estado do Terraform está atualizado.\n- Compara a configuração atual com o estado anterior e regista quaisquer diferenças.\n- Propõe um conjunto de ações que, se aplicadas, farão com que os objetos remotos correspondam à configuração.",
+      "line": 3
+    },
+    {
+      "file": "main.tf",
+      "description": "Para veres as alterações a serem feitas à tua infraestrutura executa o comando:\n\n>> terraform plan -out plan.tfplan",
+      "line": 4
+    },
+    {
+      "file": "main.tf",
+      "description": "**[terraform apply](https://developer.hashicorp.com/terraform/cli/commands/apply)**\n\n- O comando terraform apply executa as ações propostas num plan de Terraform.",
+      "line": 5
+    },
+    {
+      "file": "main.tf",
+      "description": "Para aplicares as alterações executa o comando:\n\n>> terraform apply plan.tfplan\n\n❗Não te esqueças de escrever **yes** para confirmar o apply.\n\n⏳ Tempo do apply - 1 min.\n\nVerifica que o recurso remoto foi criado:\n>> gcloud compute instances list --filter=\"name=$(terraform output -raw vm_name)\" --format=\"table(name, zone, status, machineType)\"\n\n\nVerifica todas as compute instances criadas:\n>> gcloud compute instances list",
+      "line": 6,
+      "selection": {
+        "start": {
+          "line": 10,
+          "character": 1
+        },
+        "end": {
+          "line": 11,
+          "character": 1
+        }
+      }
+    },
+    {
+      "file": "main.tf",
+      "description": "**[terraform destroy](https://developer.hashicorp.com/terraform/cli/commands/destroy)**\n\n- O comando terraform destroy é uma forma prática de destruir todos os objetos geridos por uma determinada configuração de Terraform.\n\nEmbora normalmente não se queira destruir objetos num ambiente de produção, o Terraform é, por vezes, utilizado para gerir infraestrutura efémera para fins de desenvolvimento. Nesse caso, podemos utilizar o terraform destroy para apagar todos estes recursos.",
+      "line": 7
+    },
+    {
+      "file": "main.tf",
+      "description": "Vamos destruir os recursos, para tal executa o comando:\n\n>> terraform destroy\n\n⏳ Tempo do destroy - 2 min.",
+      "line": 8
+    },
+    {
+      "file": "main.tf",
+      "description": "Confirma a destruição dos recursos:\n>> gcloud compute instances list --filter=\"name=$(terraform output -raw my_identifier)-vm\" --format=\"table(name, zone, status, machineType)\"\n\n\nCaso queiras verificar o estado das restantes compute instances:\n>> gcloud compute instances list\n\nNão deverá apresentar resultados porque estes recursos foram destruídos.",
+      "line": 9
+    },
+    {
+      "file": "main.tf",
+      "description": "## 2. lidar com as alterações\n\nNesta secção iremos demonstrar a utilização de terraform perante varios tipos de alterações.\n\nAssegurar a recriação dos recursos.\n\nPlan:\n>> terraform plan -out plan.tfplan\n\nApply:\n>> terraform apply plan.tfplan\n\n⏰ Tempo médio do apply - 1 min.",
+      "line": 16
+    },
+    {
+      "file": "main.tf",
+      "description": "**Tentar entrar para a máquina via SSH**\n\nPodem obter o comando a partir do output do terraform, ou usando o comando gcloud:\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)\n\nNão deverá ser possível fazer ssh porque precisamos de introduzir uma *firewall-tag* vamos então efectuar uma alteração **não-disruptiva**.",
+      "line": 53
+    },
+    {
+      "file": "main.tf",
+      "selection": {
+        "start": {
+          "line": 57,
+          "character": 1
+        },
+        "end": {
+          "line": 58,
+          "character": 26
+        }
+      },
+      "description": "## 2.1 Introduzindo alterações não-disruptivas\n\nAs alterações não disruptivas são pequenas alterações que possibilitam a re-configuração do recurso sem que este tenha que ser recriado, não afetando as suas dependências.\n\n- Editar o ficheiro **main.tf**, localizar o recurso *google_compute_instance.default* e descomentar o campo **tags = [ \"allow-iap\" ]** na definição do recurso.\n\nUtiliza o comando:\n\nWindows: **CTRL + K + U**\n\nMac: **CMD + K + U**"
+    },
+    {
+      "file": "main.tf",
+      "description": "Executar **terraform plan -out plan.tfplan** e verificar que o Terraform irá efectuar um update in-place - isto é uma alteração simples.\n\n>> terraform plan -out plan.tfplan\n\nExecutar **terraform apply plan.tfplan.**\n\n>> terraform apply plan.tfplan\n\n⏰ Tempo médio do apply - 1 min.",
+      "line": 59
+    },
+    {
+      "file": "main.tf",
+      "description": "Como adicionámos uma tag que permite indicar à firewall o acesso SSH por IAP, podemos então testar novo comando de SSH:\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)",
+      "line": 59
+    },
+    {
+      "file": "main.tf",
+      "selection": {
+        "start": {
+          "line": 54,
+          "character": 3
+        },
+        "end": {
+          "line": 54,
+          "character": 44
+        }
+      },
+      "description": "## 2.2 Introduzindo alterações disruptivas\n\nAs alterações disruptivas são provocadas por alterações de propriedades que provocam a recriação do recurso e consequentes dependencias.\n\nNo ficheiro **main.tf**, localiza o recurso *google_compute_instance.default* e altera o campo name para o seguinte: **\"${random_pet.this.id}-vm-new\"**"
+    },
+    {
+      "file": "main.tf",
+      "description": "Executar **terraform plan -out plan.tfplan** e verificar que o Terraform irá efectuar um replacement - é uma **alteração disruptiva**.\n\n>> terraform plan -out plan.tfplan\n\nAplicar o plan, verificar e acompanhar observando na execução do terraform que irá acontecer um **destroy** seguido de um **create**:\n\n>> terraform apply plan.tfplan\n\n⏰ Tempo médio do apply - 3 min.",
+      "line": 55
+    },
+    {
+      "file": "main.tf",
+      "description": "Verificar que o SSH continua a ser possível, mesmo com a nova instância:\n\n*o comando pode não funcionar logo...pode demorar até 1 minuto depois da VM ser criada.*\n\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)",
+      "line": 70
+    },
+    {
+      "file": "terraform.tfvars",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 2,
+          "character": 15
+        }
+      },
+      "description": "## 2.3 Introduzindo alterações dependentes\n\nAs alterações também podem ser derivadas de dependêndencias, e quando isso acontece, todo o grafo de dependendencias é afetado.\n\nEditar o ficheiro **terraform.tfvars** e alterar o valor da variavel prefix de **gcp** para **new**"
+    },
+    {
+      "file": "terraform.tfvars",
+      "description": "Executar o plan e verificar todo o grafo de dependencias é afetado:\n\n>> terraform plan -out plan.tfplan\n\nExecutar o apply:\n\n>> terraform apply plan.tfplan\n\n⏰ Tempo médio do apply - 3 min.\n\n*Notem que apenas alterámos uma mera variável...*\n\n**NOTA: NÃO DESTRUIR OS RECURSOS pois vamos usa-los no próximo passo**",
+      "line": 3
+    },
+    {
+      "file": "import-exercise.tf",
+      "description": "## 3. Importar recursos já existentes\n\nTerraform Import possibilita colocar infraestrutura já existente sob a tua gestão. Ao importar recursos para o terraform, podes gerir a tua infraestrutura de maneira coerente e consistente utilizando um fluxo de trabalho comum.\n\nEsta é uma boa maneira de se fazer uma transição gradual da infraestrutura para o terraform, ou de garantir que no futuro podemos utilizar o terraform, mesmo que actualmente ele não tenha todas as capacidades que desejaríamos.",
+      "line": 1
+    },
+    {
+      "file": "import-exercise.tf",
+      "description": "Assegurar que não existem alterações pendentes:\n\nPlan:\n>> terraform plan -out plan.tfplan\n\nApply\n>> terraform apply plan.tfplan",
+      "line": 2
+    },
+    {
+      "file": "import-exercise.tf",
+      "description": "## 3.1 Criar um recurso (google_compute_network) usando os comandos gcloud\nNesta parte vamos criar recursos recorrendo a uma ferramenta externa ao terraform por forma a criar um use-case de recursos que existem fora do state do terraform.\n\nO objetivo é simular recursos que já existiam para que os possamos terraformar.\n\nCriar uma vpc:\n\n>> gcloud compute networks create $(terraform output -raw my_identifier)-vpc --project=$(terraform output -raw project_id) --subnet-mode=custom",
+      "line": 3
+    },
+    {
+      "file": "import-exercise.tf",
+      "description": "## 3.2 Importar recursos existentes\nO processo de importação de recursos consiste em duas partes:\n\nObtenção da informação do recurso na cloud\nCriação de um bloco import que irá indicar ao terraform que o recurso já existe e que o mesmo deve ser gerido pelo terraform.\n\nO primeiro passo da importação de recursos é declarar a importação dos mesmos.\n\nPara isto, temos que definir o bloco import, que necessita de dois argumentos:\n- id: o id do recurso a importar do lado do GCP\n\n- to: o identificador terraform do recurso a importar",
+      "line": 4
+    },
+    {
+      "file": "import-exercise.tf",
+      "description": "Para o exercicio que segue, vamos ao ficheiro **import-exercise.tf** e descomentar os blocos import { ... }\n\nUtiliza o comando:\n\n**Windows: CTRL + K + U**\n\n**Mac: CMD + K + U**\n\nAntes de efetuar a importação precisamos de obter o id do recurso a importar do lado do GCP tal como descrito nas instruções de importação para o recurso google_compute_network.\n\nExistem várias formas para obter o id dos recursos, neste exemplo usamos os comandos gcloud:\n\nObter o id para a google_compute_network:\n\n>> gcloud compute networks list --uri | grep \"$(terraform output -raw my_identifier)\" | sed \"s~https://www.googleapis.com/compute/v1/~~\"",
+      "line": 5
+    },
+    {
+      "file": "import-exercise.tf",
+      "selection": {
+        "start": {
+          "line": 2,
+          "character": 1
+        },
+        "end": {
+          "line": 5,
+          "character": 4
+        }
+      },
+      "description": "Agora que temos o identificador dos recursos, temos que preencher o respetivo **id** no bloco import:\n\nSubstituir o id do recurso *google_compute_network* no bloco import do ficheiro **import-exercise.tf**\n\nVamos então correr o plan, mas vamos usar a opção -generate-config-out para gerar o código dos recursos que vão ser importados para o ficheiro **imported-resources.tf**:\n\n>> terraform plan -out plan.tfplan -generate-config-out imported-resources.tf\n\nPodemos inspeccionar os conteudos do ficheiro **imported-resources.tf**.\n\nPor fim, o apply para executar a operação planeada:\n\n>> terraform apply plan.tfplan"
+    },
+    {
+      "file": "import-exercise.tf",
+      "description": "Agora, se tentarmos agora fazer plan novamente, vamos verificar que o terraform indica que não tem alterações à infraestrutura, confirmando que os recursos foram importados som sucesso.\n\nTestar o plan:\n\n>> terraform plan -out plan.tfplan",
+      "line": 6
+    },
+    {
+      "file": "final-exercise.tf",
+      "description": "## 4. Exercício\nNeste exercicio o objectivo é aplicar alguns dos conhecimentos adquiridos nesta sessão sem que exista uma solução pronta para descomentarem 😉.\n\nPrentende-se o seguinte:\n\n👉 Devem fazer o exercicio no ficheiro final-exercise.tf.\n\n👉 Criar uma Google Cloud Service Account com os seguintes requisitos:\n\naccount_id deverá ser prefixada com valor definido no recurso random_pet.this.id para evitar colisões de nomes\n\n👉 Criar uma Google Cloud Compute Instance com os seguintes requisitos:\n\nNome da máquina deverá ser prefixado com valor definido no recurso random_pet.this.id para evitar colisões de nomes\n\nTipo de máquina: e2-small\n\nZona: europe-west1-b\n\nDeverá conter uma tag allow-iap\n\nA rede (subnetwork) onde a VM vai correr fica ao vosso critério: podem criar uma nova, ou podem usar as já existentes.\n\nA máquina deverá correr com a google_service_account previamente criada.\n\n👉 Por fim, deverão testar o correto aprovisionamento fazendo ssh para a máquina que acabaram de criar.",
+      "line": 1
+    },
+    {
+      "file": "final-exercise.tf",
+      "description": "Ajudas😵\n💡 Usem a pesquisa no terraform registry / google para saberem mais informação acerca dos recursos que estão a usar:\n\n[google_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_service_account)\n\n[google_compute_instance](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance)\n\nPara fazeres ssh faz o seguinte comando:\n\n**gcloud compute ssh <COMPUTE_INSTANCE_NAME> --project <PROJECT-ID> --zone <ZONE-NAME>**\n\n💡Preenche os campos necessários com a informação referente à tua Compute Instance Name, Project ID e Zone\n\n💡 Uma subnet já existente poderá ser *data.google_compute_subnetwork.default.self_link.*\n\n💡 Caso não consigam fazer ssh, também podem consultar a descrição da VM recorrendo ao comando:\n\n**gcloud compute instances describe COMPUTE_INSTANCE_NAME --zone=COMPUTE_INSTANCE_ZONE**",
+      "line": 2
+    },
+    {
+      "file": "main.tf",
+      "description": "## 5. wrap-up & destroy\nDestruir os conteúdos!\n\n>> terraform destroy\n\n🔚🏁 Chegámos ao fim 🏁🔚",
+      "line": 51
+    }
+  ],
+  "ref": "main"
+}
