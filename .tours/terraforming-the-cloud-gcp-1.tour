@@ -19,7 +19,7 @@
     },
     {
       "file": "tutorial.md",
-      "description": "Para definir o projecto faz o comando:\n>> gcloud config set project tf-gke-lab-01-np-000001 && gcloud config set accessibility/screen_reader false\n\nCertifica-te que estás no projecto correcto fazendo o comando:\n>> gcloud config get-value project\n\n\nSe quiseres ver todos os projectos a que tens acesso faz o comando:\n>> gcloud projects list",
+      "description": "Para definir o projecto faz o comando:\n>> gcloud config set project ten21-wshop01-p-154457 && gcloud config set accessibility/screen_reader false\n\nCertifica-te que estás no projecto correcto fazendo o comando:\n>> gcloud config get-value project\n\n\nSe quiseres ver todos os projectos a que tens acesso faz o comando:\n>> gcloud projects list",
       "line": 7
     },
     {
@@ -214,7 +214,7 @@
     },
     {
       "file": "final-exercise.tf",
-      "description": "## 4. Exercício\nNeste exercicio o objectivo é aplicar alguns dos conhecimentos adquiridos nesta sessão sem que exista uma solução pronta para descomentarem 😉.\n\nPrentende-se o seguinte:\n\n👉 Devem fazer o exercicio no ficheiro final-exercise.tf.\n\n👉 Criar uma Google Cloud Service Account com os seguintes requisitos:\n\naccount_id deverá ser prefixada com valor definido no recurso random_pet.this.id para evitar colisões de nomes\n\n👉 Criar uma Google Cloud Compute Instance com os seguintes requisitos:\n\nNome da máquina deverá ser prefixado com valor definido no recurso random_pet.this.id para evitar colisões de nomes\n\nTipo de máquina: e2-small\n\nZona: europe-west1-b\n\nDeverá conter uma tag allow-iap\n\nA rede (subnetwork) onde a VM vai correr fica ao vosso critério: podem criar uma nova, ou podem usar as já existentes.\n\nA máquina deverá correr com a google_service_account previamente criada.\n\n👉 Por fim, deverão testar o correto aprovisionamento fazendo ssh para a máquina que acabaram de criar.",
+      "description": "## 4. Exercício\nNeste exercicio o objectivo é aplicar alguns dos conhecimentos adquiridos nesta sessão sem que exista uma solução pronta para descomentarem 😉.\n\nPrentende-se o seguinte:\n\n👉 Devem fazer o exercicio no ficheiro final-exercise.tf.\n\n👉 Criar uma Google Cloud Service Account com os seguintes requisitos:\n\naccount_id deverá ser prefixada com valor definido no recurso random_pet.this.id para evitar colisões de nomes\n\n👉 Criar uma Google Cloud Compute Instance com os seguintes requisitos:\n\nNome da máquina deverá ser prefixado com valor definido no recurso random_pet.this.id para evitar colisões de nomes\n\nTipo de máquina: e2-micro\n\nZona: europe-west1-b\n\nDeverá conter uma tag allow-iap\n\nA rede (subnetwork) onde a VM vai correr fica ao vosso critério: podem criar uma nova, ou podem usar as já existentes.\n\nA máquina deverá correr com a google_service_account previamente criada.\n\n👉 Por fim, deverão testar o correto aprovisionamento fazendo ssh para a máquina que acabaram de criar.",
       "line": 1
     },
     {

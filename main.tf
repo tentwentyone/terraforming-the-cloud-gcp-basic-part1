@@ -1,7 +1,7 @@
 
 ## terraform & providers
 terraform {
-  required_version = ">= 1.5.7"
+  required_version = "1.11.2"
   backend "local" {
     path = "terraform.tfstate"
   }
@@ -9,7 +9,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 6.15"
+      version = "~> 6.23"
     }
   }
 }
@@ -52,7 +52,7 @@ data "google_compute_subnetwork" "default" {
 # criar uma VM
 resource "google_compute_instance" "default" {
   name         = "${random_pet.this.id}-vm"
-  machine_type = "g1-small"
+  machine_type = "e2-small"
   zone         = "${var.region}-b"
   ## 2.1 - Descomentar apenas quando for pedido
   #tags = [ "allow-iap" ]
