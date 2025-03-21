@@ -88,91 +88,83 @@ Para iniciar o tutorial, executamos o seguinte comando na consola:
 teachme tutorial.md
 ```
 
-## configurar o vscode
-
-> apenas válido para vscode em WSL (windows-subsystem-linux) - instalações em powershell não são suportadas
-
-Caso decidam usar o `vscode`, é necessário garantirem que têm os seguintes binários instalados.
-As instruções que seguem vão instalar as tools necessárias:
-
-1. terraform
-2. kubectl
-3. gcloud
-
-```bash
-# instalar as tools necessárias (podem skipar se já têm instaladas)
-sudo ./scripts/install-terraform.sh        # terraform
-sudo ./scripts/install-kubectl.sh          # kubectl
-curl https://sdk.cloud.google.com | bash   # gcloud
-
-# reinicializar a shell
-exec -l $SHELL
-
-# inicializar o cliente gcloud
-gcloud init
-gcloud auth application-default login
-
-# definir o projeto por defeito (opcional)
-gcloud config set project <project-id>
-```
-
-Por fim, podemos clonar o projeto:
-
-```bash
-git clone https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1.git && cd terraforming-the-cloud-gcp-basic-part1
-```
-
+## Pré-Config Vscode
+<!-- markdownlint-disable MD033 -->
 <details>
-  <summary>Solution</summary>
 
-  ```hcl
-resource "google_service_account" "this" {
-  account_id   = "${random_pet.this.id}-final"
-  display_name = "${random_pet.this.id}-final"
-}
+<summary>Clicar para expandir</summary>
+<!-- markdownlint-enable MD033 -->
 
-# criar uma VM
-resource "google_compute_instance" "this" {
-  name         = "${random_pet.this.id}-final-boss"
-  machine_type = "e2-small"
-  zone         = "${var.region}-b"
-  tags = [ "allow-iap" ]
+Para iniciares o workshop terás de aceder ao teu workspace no Coder.
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
+Será facultado um link assim como username e password para que possas fazer o login. Ao chegares a esta página utiliza as credenciais para entrares na plataforma.
 
-  network_interface {
-    subnetwork = data.google_compute_subnetwork.default.self_link
-  }
+![alt text](/images/coder-login.png)
 
-  service_account {
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    email  = google_service_account.this.email
-    scopes = ["cloud-platform"]
-  }
-}
+Ao fazerem o login deverão encontrar um workspace já criado para o propósito do workshop semelhante a este:
 
-output "final_vm" {
-  value = {
-      vm_name = google_compute_instance.this.name
-      vm_zone = google_compute_instance.this.zone
-      vm_project = google_compute_instance.this.project
-      vm_ip = google_compute_instance.this.network_interface.0.network_ip
-      gcloud_cmd = "gcloud compute ssh ${google_compute_instance.this.name} --project=${google_compute_instance.this.project} --zone ${google_compute_instance.this.zone}"
-  }
-}
+![alt text](/images/coder-workspaces.png)
 
-output "final_vm_name" {
-  value = google_compute_instance.this.name
-}
+⚠️ Não criem um novo workspace.
 
-output "final_vm_namevm_zone" {
-  value = google_compute_instance.this.zone
-}
+Ao acederem ao vosso workspace vão conseguir ver se este já se encontra disponível e se tal se verificar podem aceder ao `code-server`
+
+![alt text](/images/coder-server.png)
+
+</details>
+
+## Configurar o vscodeserver
+<!-- markdownlint-disable MD033 -->
+<details>
+
+<summary>Clicar para expandir</summary>
+<!-- markdownlint-enable MD033 -->
+
+Abre o terminal no vscode com o comando:
+
+```bash
+ctrl+ç
 ```
+
+ou se estiveres num mac:
+
+```bash
+shift+cmd+c
+```
+
+Faz git clone do repositório:
+
+```bash
+git clone https://github.com/tentwentyone/terraforming-the-cloud-gcp-basic-part1.git
+```
+
+Abre a diretoria com o comando:
+
+```bash
+ctrl+k+ctrl+o
+```
+
+ou se estiveres num mac:
+
+```bash
+cmd+k+cmd+o
+```
+
+Abre a diretoria do projecto:
+
+```bash
+cd terraforming-the-cloud-gcp-basic-part1/
+```
+
+Seleciona o path para o codetour:
+
+```bash
+/home/coder/terraforming-the-cloud-gcp-basic-part1
+```
+
+Inicia o tour no canto inferior esquerdo do teu Visual Studio Code:
+
+![alt text](images/codetour.png)
 
 </details>
 
