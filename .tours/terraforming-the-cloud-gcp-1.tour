@@ -122,7 +122,7 @@
     },
     {
       "file": "main.tf",
-      "description": "Como adicionámos uma tag que permite indicar à firewall o acesso SSH por IAP, podemos então testar novo comando de SSH:\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)",
+      "description": "Como adicionámos uma tag que permite indicar à firewall o acesso SSH por IAP, podemos então testar novo comando de SSH:\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)\n\n❗Não te esqueças de fazer **exit** da VM antes de passares para o passo seguinte.",
       "line": 59
     },
     {
@@ -146,7 +146,7 @@
     },
     {
       "file": "main.tf",
-      "description": "Verificar que o SSH continua a ser possível, mesmo com a nova instância:\n\n*o comando pode não funcionar logo...pode demorar até 1 minuto depois da VM ser criada.*\n\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)",
+      "description": "Verificar que o SSH continua a ser possível, mesmo com a nova instância:\n\n*o comando pode não funcionar logo...pode demorar até 1 minuto depois da VM ser criada.*\n\n>> gcloud compute ssh $(terraform output -raw vm_name) --project=$(terraform output -raw project_id) --zone $(terraform output -raw vm_zone)\n\n❗Não te esqueças de fazer exit da VM antes de passares para o passo seguinte.",
       "line": 70
     },
     {
